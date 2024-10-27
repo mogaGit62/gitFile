@@ -1,1 +1,3 @@
-this is an example file for git bash repo
+this is an example file for git bash repo.
+this is very good excercise by the way.
+Keep practicing all the time.
