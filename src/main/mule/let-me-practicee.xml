@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	
+	<sub-flow name="both-file-and-directories-information-Sub_Flow" doc:id="974664b2-b0e9-45f8-b12b-ab53504e689c" >
+        <file:list doc:name="list-both-file-and-folder-info" doc:id="f8882ddc-14b7-44a7-8dd7-f86ddca1351c" directoryPath="/Users/ppaul/Documents/integration-inputs">
+            <file:matcher/>
+        </file:list>
+        <ee:transform doc:name="both file-directories-payload" doc:id="a315e1f2-ba01-4e7f-b02e-caa1e43cebf7">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+
+    payload map((item,index) ->
+        {
+            fileName:item.attributes.fileName,
+            fileCreateTimeStamp: item.attributes.creationTime as LocalDateTime {format: "YYYY-MM-dd-HHmmss"},
+            filePath:item.attributes.path,
+            fileLastModified: item.attributes.lastModifiedTime as LocalDateTime {format: "YYYY-MM-dd-HHmmss"},
+            
+        })
+    ]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger" doc:id="0f74869f-19c2-4a88-9817-e2f611a29f81" message="Both file and directories listing done!!"/>
+    </sub-flow>
+
+
+	
+	</mule>
